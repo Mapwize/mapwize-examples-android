@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">MapwizeExamples</string>
+    <string name="title_activity_simple_map">SimpleMap</string>
+</resources>
