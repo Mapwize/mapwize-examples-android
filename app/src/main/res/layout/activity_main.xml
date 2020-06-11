@@ -17,10 +17,28 @@
             android:layout_height="wrap_content">
 
             <Button
-                android:text="Create mapbox alone"
+                android:text="Create simple map"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:onClick="createSimpleMap"/>
+
+            <Button
+                android:text="Create simple map xml"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="createSimpleMapXML"/>
+
+            <Button
+                android:text="Map listeners implementation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="mapListenersImplementation"/>
+
+            <Button
+                android:text="Map UI integration"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="mapUIIntegration"/>
 
         </LinearLayout>
 

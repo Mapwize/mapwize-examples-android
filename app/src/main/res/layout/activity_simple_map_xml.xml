@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SimpleMapXMLActivity">
+
+    <io.mapwize.mapwizesdk.map.MapwizeView
+        android:id="@+id/simple_map_xml_mapview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <!--    AVAILABLE OPTIONS
+        <attr name="mapwize_floor" format="float" />
+        <attr name="mapwize_language" format="string"/>
+        <attr name="mapwize_universeId" format="string"/>
+        <attr name="mapwize_centerOnVenueId" format="string"/>
+        <attr name="mapwize_centerOnPlaceId" format="string"/>
+        <attr name="mapwize_restrictContentToVenueId" format="string"/>
+        <attr name="mapwize_restrictContentToVenueIds" format="string"/>
+        <attr name="mapwize_restrictContentToOrganizationId" format="string"/>
+    -->
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -18,4 +18,19 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, SimpleMapActivity.class);
         startActivity(intent);
     }
+
+    public void createSimpleMapXML(View v) {
+        Intent intent = new Intent(this, SimpleMapXMLActivity.class);
+        startActivity(intent);
+    }
+
+    public void mapListenersImplementation(View v) {
+        Intent intent = new Intent(this, MapListenersActivity.class);
+        startActivity(intent);
+    }
+
+    public void mapUIIntegration(View v) {
+        Intent intent = new Intent(this, MapUIActivity.class);
+        startActivity(intent);
+    }
 }
