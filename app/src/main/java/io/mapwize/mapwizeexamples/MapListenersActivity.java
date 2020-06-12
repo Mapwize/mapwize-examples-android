@@ -34,7 +34,6 @@ public class MapListenersActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_listeners);
-        Mapbox.getInstance(this, MAPBOX_API_KEY);
         FrameLayout container = findViewById(R.id.container);
 
         MapOptions options = new MapOptions.Builder()

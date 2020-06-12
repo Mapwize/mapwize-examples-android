@@ -31,7 +31,6 @@ public class SimpleMapActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_simple_map);
-        Mapbox.getInstance(this, MAPBOX_API_KEY);
         FrameLayout container = findViewById(R.id.container);
         MapwizeConfiguration conf = new MapwizeConfiguration.Builder(this,
                 MAPWIZE_API_KEY)

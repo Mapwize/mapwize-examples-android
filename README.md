@@ -24,4 +24,8 @@ Shows every listeners that you can add to the map and Log every event trigger by
 
 ### MapUIActivity
 
-Show how to integrate the MapwizeUI Fragment in your application
+Shows how to integrate the MapwizeUI Fragment in your application
+
+### ShowDirectionActivity
+
+Shows how to Search and Display a direction between two places
