@@ -48,7 +48,7 @@ Shows how to create a map programmatically. This is the base example so we will 
 
 In order to create a map with specific options, you need at least a Mapwize API key obtained for signin up for free at [www.mapwize.io](https://www.mapwize.io).
 
-Once you get it you can now create your map with the minimum configuration.(see the full code [here](#https://github.com/Mapwize/mapwize-examples-android/blob/dev/app/src/main/java/io/mapwize/mapwizeexamples/SimpleMapActivity.java))
+Once you get it you can now create your map with the minimum configuration.( see the full code [here](#https://github.com/Mapwize/mapwize-examples-android/blob/dev/app/src/main/java/io/mapwize/mapwizeexamples/SimpleMapActivity.java) )
 
 **SimpleMapActivity.java**
 ```java
@@ -100,7 +100,7 @@ Next you have to add your new Map to the Layout and call for the `getMapAsync()`
 Shows how to create a map through XML file. We will show you how to do the same thing but through a XML file.
 This time we will use MapwizeExamplesApplication class to set up a Global configuration.
 
-You first Have to set up your `MAPWIZE_API_KEY` in your Application (see the full code [here](#https://github.com/Mapwize/mapwize-examples-android/blob/dev/app/src/main/java/io/mapwize/mapwizeexamples/MapwizeExamplesApplication.java))
+You first Have to set up your `MAPWIZE_API_KEY` in your Application ( see the full code [here](#https://github.com/Mapwize/mapwize-examples-android/blob/dev/app/src/main/java/io/mapwize/mapwizeexamples/MapwizeExamplesApplication.java) )
 Note that the `start` method is used to strat a MapwizeConfiguration Singleton.
 The next step is pretty straitforward as you can skip the whole configuration process.
 
@@ -136,7 +136,7 @@ To illustrate how this works, we'll achieve the exact same goal as the previous 
 		-->
 	</androidx.constraintlayout.widget.ConstraintLayout>
 ```
-Let's check the SimpleMapXMLActivity (see the full code [here](#https://github.com/Mapwize/mapwize-examples-android/blob/dev/app/src/main/java/io/mapwize/mapwizeexamples/SimpleMapXMLActivity.java))
+Let's check the SimpleMapXMLActivity ( see the full code [here](#https://github.com/Mapwize/mapwize-examples-android/blob/dev/app/src/main/java/io/mapwize/mapwizeexamples/SimpleMapXMLActivity.java) )
 
 **SimpleMapXMLActivity.java**
 ```java
