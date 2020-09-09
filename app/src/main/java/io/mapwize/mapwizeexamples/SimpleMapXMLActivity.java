@@ -26,7 +26,6 @@ public class SimpleMapXMLActivity extends AppCompatActivity {
         mapwizeView.getMapAsync((mapwizeMap) -> {
 
         });
-
     }
 
     @Override

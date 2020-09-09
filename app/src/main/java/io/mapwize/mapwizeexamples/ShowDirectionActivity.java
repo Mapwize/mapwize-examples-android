@@ -12,6 +12,8 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import com.mapbox.mapboxsdk.Mapbox;
+
 import java.util.List;
 
 import io.mapwize.mapwizesdk.api.ApiCallback;
@@ -26,8 +28,11 @@ import io.mapwize.mapwizesdk.map.MapwizeView;
 
 public class ShowDirectionActivity extends AppCompatActivity {
 
-    static final String FROM_DIRECTION_POINT_ID = "FROM_DIRECTION_POINT_ID";
-    static final String TO_DIRECTION_POINT_ID = "TO_DIRECTION_POINT_ID";
+    static final String MAPBOX_API_KEY = "pk.mapwize";
+    static final String MAPWIZE_API_KEY = "a0b142dea96e9b630855199c8c32c993";
+    static final String MAPWIZE_VENUE_ID = "56c2ea3402275a0b00fb00ac";
+    static final String FROM_DIRECTION_POINT_ID = "5db85efe1021540016db7465";
+    static final String TO_DIRECTION_POINT_ID = "5b473e6535765a0004200809";
 
     MapwizeView mapwizeView;
     MapwizeMap map;
@@ -36,10 +41,18 @@ public class ShowDirectionActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_direction);
+        Mapbox.getInstance(this, MAPBOX_API_KEY);
         FrameLayout container = findViewById(R.id.container);
-        MapOptions options = new MapOptions.Builder()
+
+        MapwizeConfiguration conf = new MapwizeConfiguration.Builder(this,
+                MAPWIZE_API_KEY)
                 .build();
-        mapwizeView = new MapwizeView(getApplicationContext(), options);
+
+        MapOptions options = new MapOptions.Builder()
+                .centerOnVenue(MAPWIZE_VENUE_ID)
+                .build();
+
+        mapwizeView = new MapwizeView(getApplicationContext(), conf, options);
 
         mapwizeView.setLayoutParams(new FrameLayout.LayoutParams(
                 FrameLayout.LayoutParams.MATCH_PARENT,

@@ -12,15 +12,16 @@ import io.mapwize.mapwizesdk.core.MapwizeConfiguration;
  * the mapwize configuration object to every instance of MapwizeMap and MapwizeApi.
  * However, even with a Global configuration, you can always use a specific configuration at any time.
  *
- * Every examples will use this Global configuration except the SimpleMapActivity which uses a custom
- * configuration (for demo purpose)
+ * Every examples will use this the SimpleMapActivity which uses a custom configuration (for demo purpose)
+ * We will only use this Global configuration for SimpleMapXMLActivity and MapUIActivity.
  */
+
 public class MapwizeExamplesApplication extends Application {
 
     // The Mapbox api key (or Mapbox token) has to be provided to load Mapbox
     private final static String MAPBOX_API_KEY = "pk.mapwize";
     // The Mapwize api key has to be provided to communicate with the backend and fetch your data
-    private final static String MAPWIZE_API_KEY = "YOUR_API_KEY";
+    private final static String MAPWIZE_API_KEY = "a0b142dea96e9b630855199c8c32c993";
 
     @Override
     public void onCreate() {

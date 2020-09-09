@@ -9,17 +9,17 @@
     <io.mapwize.mapwizesdk.map.MapwizeView
         android:id="@+id/simple_map_xml_mapview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        app:mapwize_centerOnVenueId="56c2ea3402275a0b00fb00ac"/>
 
-    <!--    AVAILABLE OPTIONS
-        <attr name="mapwize_floor" format="float" />
-        <attr name="mapwize_language" format="string"/>
+    <!-- AVAILABLE OPTIONS
+        <attr android:name="mapwize_floor" android:format="float" />
+        <attr android:name="mapwize_language" android:format="string"/>
         <attr name="mapwize_universeId" format="string"/>
-        <attr name="mapwize_centerOnVenueId" format="string"/>
+        <attr android:name="mapwize_centerOnVenueId" android:format="string"/>
         <attr name="mapwize_centerOnPlaceId" format="string"/>
         <attr name="mapwize_restrictContentToVenueId" format="string"/>
         <attr name="mapwize_restrictContentToVenueIds" format="string"/>
         <attr name="mapwize_restrictContentToOrganizationId" format="string"/>
-    -->
-
+        -->
 </androidx.constraintlayout.widget.ConstraintLayout>
