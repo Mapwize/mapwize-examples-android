@@ -21,7 +21,7 @@ public class MapwizeExamplesApplication extends Application {
     // The Mapbox api key (or Mapbox token) has to be provided to load Mapbox
     private final static String MAPBOX_API_KEY = "pk.mapwize";
     // The Mapwize api key has to be provided to communicate with the backend and fetch your data
-    private final static String MAPWIZE_API_KEY = "a0b142dea96e9b630855199c8c32c993";
+    private final static String MAPWIZE_API_KEY = "YOUR_MAPWIZE_API_KEY";
 
     @Override
     public void onCreate() {

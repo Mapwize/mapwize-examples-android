@@ -21,14 +21,14 @@ import io.mapwize.mapwizesdk.map.MapwizeView;
 
 /**
  * This SimpleMapActivity will used for almost every demo in this app
- * You can use it as starting point and add some configuration or methods provided in our SDK
+ * You can use it as starting point and add some configuration or methods provided by our SDK
  */
 
 public class SimpleMapActivity extends AppCompatActivity {
 
     static final String MAPBOX_API_KEY = "pk.mapwize";
-    static final String MAPWIZE_API_KEY = "a0b142dea96e9b630855199c8c32c993";
-    static final String MAPWIZE_VENUE_ID = "56c2ea3402275a0b00fb00ac";
+    static final String MAPWIZE_API_KEY = "YOUR_MAPWIZE_API_KEY";
+    static final String MAPWIZE_VENUE_ID = "YOU_VENUE_ID";
 
     MapwizeView mapwizeView;
 
@@ -43,7 +43,6 @@ public class SimpleMapActivity extends AppCompatActivity {
                 .build();
 
         MapOptions options = new MapOptions.Builder()
-                .centerOnVenue(MAPWIZE_VENUE_ID)
                 .build();
 
         mapwizeView = new MapwizeView(getApplicationContext(), conf, options);
@@ -57,19 +56,9 @@ public class SimpleMapActivity extends AppCompatActivity {
         mapwizeView.getMapAsync((mapwizeMap) -> {
 
             // Mapbox and Mapwize are fully loaded.
-            mapwizeMap.addOnClickListener(event -> {
-                if (event.getEventType() == ClickEvent.VENUE_CLICK) {
-                    mapwizeMap.centerOnVenue(event.getVenuePreview(), 200);
-                }
-                else if (event.getEventType() == ClickEvent.PLACE_CLICK) {
-                    mapwizeMap.addMarker(event.getPlacePreview().getDefaultCenter());
-                    mapwizeMap.addPromotedPlace(event.getPlacePreview());
-                }
-                else {
-                    mapwizeMap.removePromotedPlaces();
-                    mapwizeMap.removeMarkers();
-                }
-            });
+            /*
+                You can now do some stuff like adding places, markers, or anything else
+            */
         });
     }
 
