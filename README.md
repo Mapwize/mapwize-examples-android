@@ -27,8 +27,8 @@ Once you get this api key, you can use it in the SimpleMapActivity and in the Ma
 
 Shows how to create a map programmatically. This is the base example so we will keep it as simple as possible
 
-** activity-simple_map.xml**
-```
+**activity-simple_map.xml**
+```xml
 	<?xml version="1.0" encoding="utf-8"?>
 	<androidx.constraintlayout.widget.ConstraintLayout
 	    xmlns:android="http://schemas.android.com/apk/res/android"
@@ -48,10 +48,10 @@ Shows how to create a map programmatically. This is the base example so we will 
 
 In order to create a map with specific options, you need at least a Mapwize API key obtained for signin up for free at [www.mapwize.io](https://www.mapwize.io).
 
-Once you get it you can now create your map with the minimum configuration.(see the full code [here](#https://github.com/Mapwize/mapwize-examples-android/blob/dev/app/src/main/java/io/mapwize/mapwizeexamples/SimpleMapActivity.java)
+Once you get it you can now create your map with the minimum configuration.(see the full code [here](#https://github.com/Mapwize/mapwize-examples-android/blob/dev/app/src/main/java/io/mapwize/mapwizeexamples/SimpleMapActivity.java))
 
-** SimpleMapActivity.java**
-```
+**SimpleMapActivity.java**
+```java
 	public class SimpleMapActivity extends AppCompatActivity {
 
 	    static final String MAPBOX_API_KEY = "pk.mapwize";
@@ -97,7 +97,65 @@ Next you have to add your new Map to the Layout and call for the `getMapAsync()`
 
 ### SimpleMapXMLActivity
 
-Shows how to create a map through XML file.
+Shows how to create a map through XML file. We will show you how to do the same thing but through a XML file.
+This time we will use MapwizeExamplesApplication class to set up a Global configuration.
+
+You first Have to set up your `MAPWIZE_API_KEY` in your Application (see the full code [here](#https://github.com/Mapwize/mapwize-examples-android/blob/dev/app/src/main/java/io/mapwize/mapwizeexamples/MapwizeExamplesApplication.java))
+Note that the `start` method is used to strat a MapwizeConfiguration Singleton.
+The next step is pretty straitforward as you can skip the whole configuration process.
+
+To illustrate how this works, we'll achieve the exact same goal as the previous example: To display a simple Map except this time I will use the `mapwize_centerOnVenueId` attribute to instanciate the map already focused on a specific Venue.
+
+**activity-simple_map_xml.xml**
+```xml
+	<?xml version="1.0" encoding="utf-8"?>
+	<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	    xmlns:app="http://schemas.android.com/apk/res-auto"
+	    xmlns:tools="http://schemas.android.com/tools"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    tools:context=".SimpleMapXMLActivity">
+
+	    <io.mapwize.mapwizesdk.map.MapwizeView
+		android:id="@+id/simple_map_xml_mapview"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		
+		<!-- here is the mapwize_centerOnVenueId attribute used to load the map focused on this Venue -->
+		app:mapwize_centerOnVenueId="SOME_VENUE_ID"/>
+
+	    <!-- AVAILABLE OPTIONS
+		<attr android:name="mapwize_floor" android:format="float" />
+		<attr android:name="mapwize_language" android:format="string"/>
+		<attr name="mapwize_universeId" format="string"/>
+		<attr android:name="mapwize_centerOnVenueId" android:format="string"/>
+		<attr name="mapwize_centerOnPlaceId" format="string"/>
+		<attr name="mapwize_restrictContentToVenueId" format="string"/>
+		<attr name="mapwize_restrictContentToVenueIds" format="string"/>
+		<attr name="mapwize_restrictContentToOrganizationId" format="string"/>
+		-->
+	</androidx.constraintlayout.widget.ConstraintLayout>
+```
+Let's check the SimpleMapXMLActivity (see the full code [here](#https://github.com/Mapwize/mapwize-examples-android/blob/dev/app/src/main/java/io/mapwize/mapwizeexamples/SimpleMapXMLActivity.java))
+
+**SimpleMapXMLActivity.java**
+```java
+	public class SimpleMapXMLActivity extends AppCompatActivity {
+
+	    MapwizeView mapwizeView;
+
+	    @Override
+	    protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_simple_map_xml);
+		mapwizeView = findViewById(R.id.simple_map_xml_mapview);
+		mapwizeView.getMapAsync((mapwizeMap) -> {
+			
+		});
+	    }
+    	}
+```
+As you can see it's much quicker to use the Mapwize Global configuration. All you have to do is to retrieve your MapwizeView and call `getMapAsync` to get your map loaded based on the XML options you chose.
 
 ### MapListenersActivity
 
