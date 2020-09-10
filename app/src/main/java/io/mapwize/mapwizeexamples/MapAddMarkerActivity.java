@@ -35,8 +35,8 @@ public class MapAddMarkerActivity extends AppCompatActivity {
 
     static final String MAPBOX_API_KEY = "pk.mapwize";
     static final String MAPWIZE_API_KEY = "YOUR_MAPWIZE_API_KEY";
-    static final String MAPWIZE_VENUE_ID = "YOUR_VENUE_ID";
-    static final String MAPWIZE_PLACE_ID = "SOME_PLACE_ID";
+    static final String MAPWIZE_VENUE_ID = "56c2ea3402275a0b00fb00ac";
+    static final String MAPWIZE_PLACELIST_ID = "5728a351a3a26c0b0027d5cf";
 
     MapwizeView mapwizeView;
     MapwizeMap map;
@@ -77,20 +77,20 @@ public class MapAddMarkerActivity extends AppCompatActivity {
 
             // Mapbox and Mapwize are fully loaded
             map.addOnClickListener(clickEvent ->  {
-                // Check if we are not outside a Venue
-                if (map.getVenue() != null) {
-                    if (clickEvent.getEventType() == ClickEvent.VENUE_CLICK) {
+                switch(clickEvent.getEventType()){
+                    case ClickEvent.VENUE_CLICK:
                         map.centerOnCoordinate(clickEvent.getLatLngFloor(),16,200);
-                    } else if (clickEvent.getEventType() == ClickEvent.PLACE_CLICK) {
+                        break;
+                    case ClickEvent.PLACE_CLICK:
                         // Add your marker on a place
                         map.addMarker(clickEvent.getPlacePreview());
-                    } else {
+                        break;
+                    default:
                         // If not a place add a marker by coordinates
                         map.addMarker(clickEvent.getLatLngFloor());
-                    }
+                        break;
                 }
             });
-
             //Add a marker listener to remove it
             map.addOnMarkerClickListener(marker -> map.removeMarker(marker));
         });
@@ -103,25 +103,23 @@ public class MapAddMarkerActivity extends AppCompatActivity {
 
     // method a add custom marker to a specific Placelist
     public void addCustomMarkers(View v) {
-        map.getMapwizeApi().getPlacelist(MAPWIZE_PLACE_ID, new ApiCallback<Placelist>(){
+        map.getMapwizeApi().getPlacelist(MAPWIZE_PLACELIST_ID, new ApiCallback<Placelist>(){
 
             @Override
             public void onSuccess(@NonNull Placelist placelist) {
-                map.addMarker(placelist,"customIcon1",  new MapwizeMap.OnMarkersAdded(){
-                    @Override
-                    public void getMarkersAsync(@NonNull List<Marker> list) {
-
-                    }
+                map.addMarker(placelist,"customIcon1", list -> {
                 });
             }
 
             @Override
             public void onFailure(@NonNull Throwable throwable) {
-                showError(
-                        "No Placelist found for"
-                                + MAPWIZE_PLACE_ID
-                                + ", be sure you entered the correct PLACE_ID "
-                );
+                runOnUiThread(() -> {
+                    showError(
+                            "No Placelist found for Placelist number : "
+                                    + MAPWIZE_PLACELIST_ID
+                                    + ", be sure you entered the correct PLACELIST_ID "
+                    );
+                });
             }
         });
     }
