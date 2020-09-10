@@ -36,7 +36,7 @@ public class MapSetPlaceStyleActivity extends AppCompatActivity {
 
     static final String MAPBOX_API_KEY = "pk.mapwize";
     static final String MAPWIZE_API_KEY = "YOUR_MAPWIZE_API_KEY";
-    static final String MAPWIZE_VENUE_ID = "SOME_VENUE_ID";
+    static final String MAPWIZE_VENUE_ID = "56c2ea3402275a0b00fb00ac";
 
     //Retrive your places IDs
     static final String MAPWIZE_PLACE_ID = "5ae73a842373e90013ac4f65";

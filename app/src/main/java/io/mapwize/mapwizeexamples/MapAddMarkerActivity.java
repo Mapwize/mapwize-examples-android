@@ -35,7 +35,7 @@ public class MapAddMarkerActivity extends AppCompatActivity {
 
     static final String MAPBOX_API_KEY = "pk.mapwize";
     static final String MAPWIZE_API_KEY = "YOUR_MAPWIZE_API_KEY";
-    static final String MAPWIZE_VENUE_ID = "YOUR_VENUE_ID";
+    static final String MAPWIZE_VENUE_ID = "56c2ea3402275a0b00fb00ac";
     static final String MAPWIZE_PLACELIST_ID = "SOME_PLACE_ID";
 
     MapwizeView mapwizeView;

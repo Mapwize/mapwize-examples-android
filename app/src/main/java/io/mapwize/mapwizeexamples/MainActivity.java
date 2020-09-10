@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void setStylesToPlaces(View v) {
-        Intent intent = new Intent(this, MapAddMarkerActivity.class);
+        Intent intent = new Intent(this, MapSetPlaceStyleActivity.class);
         startActivity(intent);
     }
 }
