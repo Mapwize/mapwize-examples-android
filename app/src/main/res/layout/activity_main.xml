@@ -51,6 +51,12 @@
                 android:layout_height="wrap_content"
                 android:onClick="addMarkerToMap"/>
 
+            <Button
+                android:text="Set new styles for places"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="setStylesToPlaces"/>
+
         </LinearLayout>
 
     </ScrollView>

@@ -36,7 +36,7 @@ public class MapAddMarkerActivity extends AppCompatActivity {
     static final String MAPBOX_API_KEY = "pk.mapwize";
     static final String MAPWIZE_API_KEY = "YOUR_MAPWIZE_API_KEY";
     static final String MAPWIZE_VENUE_ID = "YOUR_VENUE_ID";
-    static final String MAPWIZE_PLACE_ID = "SOME_PLACE_ID";
+    static final String MAPWIZE_PLACELIST_ID = "SOME_PLACE_ID";
 
     MapwizeView mapwizeView;
     MapwizeMap map;
@@ -103,7 +103,7 @@ public class MapAddMarkerActivity extends AppCompatActivity {
 
     // method a add custom marker to a specific Placelist
     public void addCustomMarkers(View v) {
-        map.getMapwizeApi().getPlacelist(MAPWIZE_PLACE_ID, new ApiCallback<Placelist>(){
+        map.getMapwizeApi().getPlacelist(MAPWIZE_PLACELIST_ID, new ApiCallback<Placelist>(){
 
             @Override
             public void onSuccess(@NonNull Placelist placelist) {
@@ -119,7 +119,7 @@ public class MapAddMarkerActivity extends AppCompatActivity {
             public void onFailure(@NonNull Throwable throwable) {
                 showError(
                         "No Placelist found for"
-                                + MAPWIZE_PLACE_ID
+                                + MAPWIZE_PLACELIST_ID
                                 + ", be sure you entered the correct PLACE_ID "
                 );
             }
