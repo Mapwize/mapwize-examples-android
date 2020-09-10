@@ -1,28 +1,45 @@
 package io.mapwize.mapwizeexamples;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.mapbox.mapboxsdk.Mapbox;
+import com.mapbox.mapboxsdk.utils.BitmapUtils;
 
+import java.util.List;
+
+import io.mapwize.mapwizesdk.api.ApiCallback;
+import io.mapwize.mapwizesdk.api.Placelist;
 import io.mapwize.mapwizesdk.api.Venue;
 import io.mapwize.mapwizesdk.core.MapwizeConfiguration;
 import io.mapwize.mapwizesdk.map.ClickEvent;
 import io.mapwize.mapwizesdk.map.MapOptions;
 import io.mapwize.mapwizesdk.map.MapwizeMap;
 import io.mapwize.mapwizesdk.map.MapwizeView;
+import io.mapwize.mapwizesdk.map.Marker;
 
-public class MapAddMarker extends AppCompatActivity {
+/**
+ * This activity is about showing how you can place markers to different locations in your Venue.
+ * We show also show you a fews methods to remove all markers by clicking on a button, or to remove a single marker by clicking on it.
+ * We also illustrate how you can add custom markers to a placelist and display them all at once by clicking on a button.
+ */
+
+public class MapAddMarkerActivity extends AppCompatActivity {
 
     static final String MAPBOX_API_KEY = "pk.mapwize";
-    static final String MAPWIZE_API_KEY = "a0b142dea96e9b630855199c8c32c993";
-    static final String MAPWIZE_VENUE_ID = "56c2ea3402275a0b00fb00ac";
+    static final String MAPWIZE_API_KEY = "YOUR_MAPWIZE_API_KEY";
+    static final String MAPWIZE_VENUE_ID = "YOUR_VENUE_ID";
+    static final String MAPWIZE_PLACE_ID = "SOME_PLACE_ID";
 
     MapwizeView mapwizeView;
-
+    MapwizeMap map;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,9 +50,15 @@ public class MapAddMarker extends AppCompatActivity {
         MapwizeConfiguration conf = new MapwizeConfiguration.Builder(this,
                 MAPWIZE_API_KEY)
                 .build();
+
         MapOptions options = new MapOptions.Builder()
+                //Really usefull to load your map center on your desired Venue
+                .centerOnVenue(MAPWIZE_VENUE_ID)
                 .build();
         mapwizeView = new MapwizeView(getApplicationContext(), conf, options);
+
+        // create a Bitmap to add a custom icon to your map
+        Bitmap customIcon = BitmapUtils.getBitmapFromDrawable(getApplicationContext().getDrawable(R.drawable.ic_baseline_location_on_24));
 
         mapwizeView.setLayoutParams(new FrameLayout.LayoutParams(
                 FrameLayout.LayoutParams.MATCH_PARENT,
@@ -43,27 +66,114 @@ public class MapAddMarker extends AppCompatActivity {
         ));
         container.addView(mapwizeView);
         mapwizeView.onCreate(savedInstanceState);
-        mapwizeView.getMapAsync((mapwizeMap) -> {
+        mapwizeView.getMapAsync(mapwizeMap -> {
 
-            // Mapbox and Mapwize are fully loaded.
+            map = mapwizeMap;
+            // add your custom icon to your map
+            map.addImageToMap("customIcon1",customIcon);
 
-            mapwizeMap.addOnClickListener(event -> {
+            findViewById(R.id.removeMarkersButton).setVisibility(View.VISIBLE);
+            findViewById(R.id.addCustomMarkersButton).setVisibility(View.VISIBLE);
+
+            // Mapbox and Mapwize are fully loaded
+            map.addOnClickListener(clickEvent ->  {
                 // Check if we are not outside a Venue
-                if (mapwizeMap.getVenue() != null) {
-                    if (event.getEventType() == ClickEvent.VENUE_CLICK) {
-                        mapwizeMap.centerOnVenue(event.getVenuePreview(), 300);
-                        mapwizeMap.addMarker(event.getLatLngFloor());
+                if (map.getVenue() != null) {
+                    if (clickEvent.getEventType() == ClickEvent.VENUE_CLICK) {
+                        map.centerOnCoordinate(clickEvent.getLatLngFloor(),16,200);
+                    } else if (clickEvent.getEventType() == ClickEvent.PLACE_CLICK) {
+                        // Add your marker on a place
+                        map.addMarker(clickEvent.getPlacePreview());
+                    } else {
+                        // If not a place add a marker by coordinates
+                        map.addMarker(clickEvent.getLatLngFloor());
                     }
-                    else if (event.getEventType() == ClickEvent.PLACE_CLICK) {
-                        mapwizeMap.addMarker(event.getLatLngFloor());
-                        mapwizeMap.centerOnPlace(event.getPlacePreview(),400);
-                        mapwizeMap.addPromotedPlace(event.getPlacePreview());
-                    }
-                }
-                else {
-                    Log.i("MapAddMarkerActivity", "outside a venue");
                 }
             });
+
+            //Add a marker listener to remove it
+            map.addOnMarkerClickListener(marker -> map.removeMarker(marker));
         });
+    }
+
+    // Remove all the markers on the map
+    public void removeMarkers(View v){
+        map.removeMarkers();
+    }
+
+    // method a add custom marker to a specific Placelist
+    public void addCustomMarkers(View v) {
+        map.getMapwizeApi().getPlacelist(MAPWIZE_PLACE_ID, new ApiCallback<Placelist>(){
+
+            @Override
+            public void onSuccess(@NonNull Placelist placelist) {
+                map.addMarker(placelist,"customIcon1",  new MapwizeMap.OnMarkersAdded(){
+                    @Override
+                    public void getMarkersAsync(@NonNull List<Marker> list) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure(@NonNull Throwable throwable) {
+                showError(
+                        "No Placelist found for"
+                                + MAPWIZE_PLACE_ID
+                                + ", be sure you entered the correct PLACE_ID "
+                );
+            }
+        });
+    }
+
+    // Usefull to display a message in a Toast
+    private void showError(String message) {
+        Toast.makeText(
+                getApplicationContext(),
+                message,
+                Toast.LENGTH_LONG)
+                .show();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        mapwizeView.onStart();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mapwizeView.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        mapwizeView.onPause();
+        super.onPause();
+    }
+
+    @Override
+    public void onStop() {
+        mapwizeView.onStop();
+        super.onStop();
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle saveInstanceState) {
+        super.onSaveInstanceState(saveInstanceState);
+        mapwizeView.onSaveInstanceState(saveInstanceState);
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        mapwizeView.onLowMemory();
+    }
+
+    @Override
+    public void onDestroy() {
+        mapwizeView.onDestroy();
+        super.onDestroy();
     }
 }

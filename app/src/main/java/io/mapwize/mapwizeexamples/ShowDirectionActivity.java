@@ -29,10 +29,10 @@ import io.mapwize.mapwizesdk.map.MapwizeView;
 public class ShowDirectionActivity extends AppCompatActivity {
 
     static final String MAPBOX_API_KEY = "pk.mapwize";
-    static final String MAPWIZE_API_KEY = "a0b142dea96e9b630855199c8c32c993";
-    static final String MAPWIZE_VENUE_ID = "56c2ea3402275a0b00fb00ac";
-    static final String FROM_DIRECTION_POINT_ID = "5db85efe1021540016db7465";
-    static final String TO_DIRECTION_POINT_ID = "5b473e6535765a0004200809";
+    static final String MAPWIZE_API_KEY = "YOUR_MAPWIZE_API_KEY";
+    static final String MAPWIZE_VENUE_ID = "SOME_VENUE_ID";
+    static final String FROM_DIRECTION_POINT_ID = "STARTING_POINT_ID";
+    static final String TO_DIRECTION_POINT_ID = "DESTINATION_POINT_ID";
 
     MapwizeView mapwizeView;
     MapwizeMap map;

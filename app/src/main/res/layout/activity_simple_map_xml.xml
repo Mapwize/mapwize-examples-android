@@ -10,7 +10,7 @@
         android:id="@+id/simple_map_xml_mapview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:mapwize_centerOnVenueId="56c2ea3402275a0b00fb00ac"/>
+        app:mapwize_centerOnVenueId="SOME_VENUE_ID"/>
 
     <!-- AVAILABLE OPTIONS
         <attr android:name="mapwize_floor" android:format="float" />
