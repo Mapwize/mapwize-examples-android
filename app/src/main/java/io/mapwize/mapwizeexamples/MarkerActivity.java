@@ -28,7 +28,7 @@ import io.mapwize.mapwizesdk.map.MapwizeView;
 public class MarkerActivity extends AppCompatActivity {
 
     static final String MAPBOX_API_KEY = "pk.mapwize";
-    static final String MAPWIZE_API_KEY = "a0b142dea96e9b630855199c8c32c993";
+    static final String MAPWIZE_API_KEY = "YOUR_MAPWIZE_API_KEY";
     static final String MAPWIZE_VENUE_ID = "56c2ea3402275a0b00fb00ac";
     static final String MAPWIZE_PLACELIST_ID = "5728a351a3a26c0b0027d5cf";
 
