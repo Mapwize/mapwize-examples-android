@@ -10,8 +10,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MapSetPlaceStyleActivity"></activity>
-        <activity android:name=".MapAddMarkerActivity" />
+        <activity android:name=".PlaceStyleActivity"></activity>
+        <activity android:name=".MarkerActivity" />
         <activity android:name=".ShowDirectionActivity" />
         <activity android:name=".MapUIActivity" />
         <activity

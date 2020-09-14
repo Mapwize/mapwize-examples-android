@@ -2,10 +2,8 @@ package io.mapwize.mapwizeexamples;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.Toast;
@@ -13,17 +11,13 @@ import android.widget.Toast;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.utils.BitmapUtils;
 
-import java.util.List;
-
 import io.mapwize.mapwizesdk.api.ApiCallback;
 import io.mapwize.mapwizesdk.api.Placelist;
-import io.mapwize.mapwizesdk.api.Venue;
 import io.mapwize.mapwizesdk.core.MapwizeConfiguration;
 import io.mapwize.mapwizesdk.map.ClickEvent;
 import io.mapwize.mapwizesdk.map.MapOptions;
 import io.mapwize.mapwizesdk.map.MapwizeMap;
 import io.mapwize.mapwizesdk.map.MapwizeView;
-import io.mapwize.mapwizesdk.map.Marker;
 
 /**
  * This activity is about showing how you can place markers to different locations in your Venue.
@@ -31,12 +25,12 @@ import io.mapwize.mapwizesdk.map.Marker;
  * We also illustrate how you can add custom markers to a placelist and display them all at once by clicking on a button.
  */
 
-public class MapAddMarkerActivity extends AppCompatActivity {
+public class MarkerActivity extends AppCompatActivity {
 
     static final String MAPBOX_API_KEY = "pk.mapwize";
-    static final String MAPWIZE_API_KEY = "YOUR_MAPWIZE_API_KEY";
+    static final String MAPWIZE_API_KEY = "a0b142dea96e9b630855199c8c32c993";
     static final String MAPWIZE_VENUE_ID = "56c2ea3402275a0b00fb00ac";
-    static final String MAPWIZE_PLACELIST_ID = "SOME_PLACE_ID";
+    static final String MAPWIZE_PLACELIST_ID = "5728a351a3a26c0b0027d5cf";
 
     MapwizeView mapwizeView;
     MapwizeMap map;
@@ -44,7 +38,7 @@ public class MapAddMarkerActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_map_add_marker);
+        setContentView(R.layout.activity_map_marker);
         Mapbox.getInstance(this, MAPBOX_API_KEY);
         FrameLayout container = findViewById(R.id.container);
         MapwizeConfiguration conf = new MapwizeConfiguration.Builder(this,
@@ -57,7 +51,6 @@ public class MapAddMarkerActivity extends AppCompatActivity {
                 .build();
         mapwizeView = new MapwizeView(getApplicationContext(), conf, options);
 
-        // create a Bitmap to add a custom icon to your map
         Bitmap customIcon = BitmapUtils.getBitmapFromDrawable(getApplicationContext().getDrawable(R.drawable.ic_baseline_location_on_24));
 
         mapwizeView.setLayoutParams(new FrameLayout.LayoutParams(
@@ -77,20 +70,20 @@ public class MapAddMarkerActivity extends AppCompatActivity {
 
             // Mapbox and Mapwize are fully loaded
             map.addOnClickListener(clickEvent ->  {
-                // Check if we are not outside a Venue
-                if (map.getVenue() != null) {
-                    if (clickEvent.getEventType() == ClickEvent.VENUE_CLICK) {
+                switch(clickEvent.getEventType()){
+                    case ClickEvent.VENUE_CLICK:
                         map.centerOnCoordinate(clickEvent.getLatLngFloor(),16,200);
-                    } else if (clickEvent.getEventType() == ClickEvent.PLACE_CLICK) {
+                        break;
+                    case ClickEvent.PLACE_CLICK:
                         // Add your marker on a place
                         map.addMarker(clickEvent.getPlacePreview());
-                    } else {
+                        break;
+                    default:
                         // If not a place add a marker by coordinates
                         map.addMarker(clickEvent.getLatLngFloor());
-                    }
+                        break;
                 }
             });
-
             //Add a marker listener to remove it
             map.addOnMarkerClickListener(marker -> map.removeMarker(marker));
         });
@@ -107,21 +100,19 @@ public class MapAddMarkerActivity extends AppCompatActivity {
 
             @Override
             public void onSuccess(@NonNull Placelist placelist) {
-                map.addMarker(placelist,"customIcon1",  new MapwizeMap.OnMarkersAdded(){
-                    @Override
-                    public void getMarkersAsync(@NonNull List<Marker> list) {
-
-                    }
+                map.addMarker(placelist,"customIcon1", list -> {
                 });
             }
 
             @Override
             public void onFailure(@NonNull Throwable throwable) {
-                showError(
-                        "No Placelist found for"
-                                + MAPWIZE_PLACELIST_ID
-                                + ", be sure you entered the correct PLACE_ID "
-                );
+                runOnUiThread(() -> {
+                    showError(
+                            "No Placelist found for Placelist number : "
+                                    + MAPWIZE_PLACELIST_ID
+                                    + ", be sure you entered the correct PLACELIST_ID "
+                    );
+                });
             }
         });
     }

@@ -40,12 +40,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void addMarkerToMap(View v) {
-        Intent intent = new Intent(this, MapAddMarkerActivity.class);
+        Intent intent = new Intent(this, MarkerActivity.class);
         startActivity(intent);
     }
 
     public void setStylesToPlaces(View v) {
-        Intent intent = new Intent(this, MapSetPlaceStyleActivity.class);
+        Intent intent = new Intent(this, PlaceStyleActivity.class);
         startActivity(intent);
     }
 }
