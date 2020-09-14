@@ -42,7 +42,7 @@ public class PlaceStyleActivity extends AppCompatActivity {
 
     static final String MAPBOX_API_KEY = "pk.mapwize";
     static final String MAPWIZE_API_KEY = "a0b142dea96e9b630855199c8c32c993";
-    static final String MAPWIZE_VENUE_ID = "56c2ea3402275a0b00fb00ac";
+    static final String MAPWIZE_VENUE_ID = "56c2ea3402275a0b00fb0";
 
 
     //Style attributes
@@ -86,10 +86,10 @@ public class PlaceStyleActivity extends AppCompatActivity {
 
             map = mapwizeMap;
 
-            map.addImageToMap("customIcon1",customIcon);
-
             findViewById(R.id.removePlaceStyle).setVisibility(View.VISIBLE);
             findViewById(R.id.addMultipleRandomPlaceStyle).setVisibility(View.VISIBLE);
+
+            map.addImageToMap("customIcon1",customIcon);
 
             style = new Style.Builder()
                     .fillColor(PLACE_FILL_COLOR)
@@ -124,8 +124,8 @@ public class PlaceStyleActivity extends AppCompatActivity {
             map.addOnVenueEnterListener(new MapwizeMap.OnVenueEnterListener() {
                 @Override
                 public void onVenueEnter(@NonNull Venue venue) {
-                    findViewById(R.id.removePlaceStyle).setClickable(true);
-                    findViewById(R.id.addMultipleRandomPlaceStyle).setClickable(true);
+                    findViewById(R.id.removePlaceStyle).setEnabled(true);
+                    findViewById(R.id.addMultipleRandomPlaceStyle).setEnabled(true);
                 }
 
                 @Override
@@ -135,8 +135,8 @@ public class PlaceStyleActivity extends AppCompatActivity {
             map.addOnVenueExitListener(new MapwizeMap.OnVenueExitListener() {
                 @Override
                 public void onVenueExit(@NonNull Venue venue) {
-                    findViewById(R.id.removePlaceStyle).setClickable(false);
-                    findViewById(R.id.addMultipleRandomPlaceStyle).setClickable(false);
+                    findViewById(R.id.removePlaceStyle).setEnabled(false);
+                    findViewById(R.id.addMultipleRandomPlaceStyle).setEnabled(false);
                 }
             });
 
