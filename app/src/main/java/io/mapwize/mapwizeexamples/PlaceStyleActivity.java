@@ -41,8 +41,8 @@ import io.mapwize.mapwizesdk.map.PreviewCallback;
 public class PlaceStyleActivity extends AppCompatActivity {
 
     static final String MAPBOX_API_KEY = "pk.mapwize";
-    static final String MAPWIZE_API_KEY = "a0b142dea96e9b630855199c8c32c993";
-    static final String MAPWIZE_VENUE_ID = "56c2ea3402275a0b00fb0";
+    static final String MAPWIZE_API_KEY = "YOUR_MAPWIZE_API_KEY";
+    static final String MAPWIZE_VENUE_ID = "56c2ea3402275a0b00fb00ac";
 
 
     //Style attributes
@@ -171,7 +171,7 @@ public class PlaceStyleActivity extends AppCompatActivity {
             public void onFailure(@NonNull Throwable throwable) {
                 runOnUiThread(() -> {
                     showError(
-                            "Something horrible happened"
+                            "Something horrible happened (your VenueId might not be correct)"
                     );
                 });
             }
