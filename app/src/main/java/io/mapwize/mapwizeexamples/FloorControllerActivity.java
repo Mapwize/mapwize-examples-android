@@ -2,6 +2,7 @@ package io.mapwize.mapwizeexamples;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -36,12 +37,12 @@ import io.mapwize.mapwizesdk.map.MapwizeView;
 public class FloorControllerActivity extends AppCompatActivity {
 
     static final String MAPBOX_API_KEY = "pk.mapwize";
-    static final String MAPWIZE_API_KEY = "YOUR_MAPWIZE_API_KEY";
+    static final String MAPWIZE_API_KEY = "";
     static final String MAPWIZE_VENUE_ID = "56c2ea3402275a0b00fb00ac";
     static final String MAPWIZE_PLACELIST_ID = "5728a351a3a26c0b0027d5cf";
 
     private RecyclerView recyclerView;
-    private RecyclerView.Adapter mAdapter;
+    private FloorAdapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
 
     MapwizeView mapwizeView;
@@ -60,7 +61,6 @@ public class FloorControllerActivity extends AppCompatActivity {
                 .build();
 
         MapOptions options = new MapOptions.Builder()
-                //Really usefull to load your map center on your desired Venue
                 .centerOnVenue(MAPWIZE_VENUE_ID)
                 .build();
 
@@ -73,9 +73,7 @@ public class FloorControllerActivity extends AppCompatActivity {
         container.addView(mapwizeView);
         mapwizeView.onCreate(savedInstanceState);
 
-        layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         mAdapter = new FloorAdapter();
         recyclerView.setAdapter(mAdapter);
 
@@ -83,10 +81,10 @@ public class FloorControllerActivity extends AppCompatActivity {
         mapwizeView.getMapAsync(mapwizeMap -> {
 
             map = mapwizeMap;
-            System.out.println(map.getFloors());
 
-            //setFloors method 
-            ((FloorAdapter) mAdapter).setFloors(map.getFloors());
+            mapwizeMap.addOnFloorsChangeListener(floors -> {
+                mAdapter.setFloors(floors);
+            });
 
         });
     }
@@ -109,16 +107,16 @@ public class FloorControllerActivity extends AppCompatActivity {
         @Override
         public FloorAdapter.FloorViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             this.context = parent.getContext();
-            Button button = (Button) LayoutInflater.from(parent.getContext())
+            View view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.floor_button_view, parent, false);
 
-            FloorViewHolder vh = new FloorViewHolder(button);
+            FloorViewHolder vh = new FloorViewHolder(view);
             return vh;
         }
 
         @Override
         public void onBindViewHolder(@NonNull FloorAdapter.FloorViewHolder holder, int position) {
-            holder.floorButton.setText(floors.get(position).getName());
+            holder.setFloor(floors.get(position));
 
         }
 
@@ -128,9 +126,19 @@ public class FloorControllerActivity extends AppCompatActivity {
         }
 
         public static class FloorViewHolder extends RecyclerView.ViewHolder {
-            public Button floorButton;
-            public FloorViewHolder(Button button) {
-                super(button);
+            private Button floorButton;
+            private Floor floor;
+            public FloorViewHolder(View view) {
+                super(view);
+                floorButton = view.findViewById(R.id.floorButton);
+            }
+
+            public void setFloor(Floor floor) {
+                this.floor = floor;
+                floorButton.setText(floor.getName());
+                floorButton.setOnClickListener(v -> {
+                    // Faire quelque chose avec this.floor
+                });
             }
         }
     }
