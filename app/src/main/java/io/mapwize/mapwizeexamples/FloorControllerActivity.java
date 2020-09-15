@@ -2,7 +2,6 @@ package io.mapwize.mapwizeexamples;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,7 +20,6 @@ import java.util.List;
 
 import io.mapwize.mapwizesdk.api.Floor;
 import io.mapwize.mapwizesdk.core.MapwizeConfiguration;
-import io.mapwize.mapwizesdk.map.ClickEvent;
 import io.mapwize.mapwizesdk.map.MapOptions;
 import io.mapwize.mapwizesdk.map.MapwizeMap;
 import io.mapwize.mapwizesdk.map.MapwizeView;
@@ -43,7 +41,6 @@ public class FloorControllerActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private FloorAdapter mAdapter;
-    private RecyclerView.LayoutManager layoutManager;
 
     MapwizeView mapwizeView;
     MapwizeMap map;
@@ -54,7 +51,7 @@ public class FloorControllerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_floor_controller);
         Mapbox.getInstance(this, MAPBOX_API_KEY);
         FrameLayout container = findViewById(R.id.container);
-        recyclerView = (RecyclerView) findViewById(R.id.floorController);
+        recyclerView = findViewById(R.id.floorController);
 
         MapwizeConfiguration conf = new MapwizeConfiguration.Builder(this,
                 MAPWIZE_API_KEY)
@@ -82,9 +79,7 @@ public class FloorControllerActivity extends AppCompatActivity {
 
             map = mapwizeMap;
 
-            mapwizeMap.addOnFloorsChangeListener(floors -> {
-                mAdapter.setFloors(floors);
-            });
+            mapwizeMap.addOnFloorsChangeListener(floors -> mAdapter.setFloors(floors));
 
         });
     }
@@ -109,9 +104,7 @@ public class FloorControllerActivity extends AppCompatActivity {
             this.context = parent.getContext();
             View view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.floor_button_view, parent, false);
-
-            FloorViewHolder vh = new FloorViewHolder(view);
-            return vh;
+            return new FloorViewHolder(view);
         }
 
         @Override
