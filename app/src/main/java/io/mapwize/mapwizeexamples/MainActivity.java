@@ -43,4 +43,9 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, MarkerActivity.class);
         startActivity(intent);
     }
+
+    public void manageFloors(View v) {
+        Intent intent = new Intent(this, FloorControllerActivity.class);
+        startActivity(intent);
+    }
 }
