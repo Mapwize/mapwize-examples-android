@@ -1,15 +1,23 @@
 package io.mapwize.mapwizeexamples;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
+import android.app.Application;
 import android.content.Context;
+import android.graphics.BlendMode;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.FrameLayout;
 
@@ -35,9 +43,8 @@ import io.mapwize.mapwizesdk.map.MapwizeView;
 public class FloorControllerActivity extends AppCompatActivity {
 
     static final String MAPBOX_API_KEY = "pk.mapwize";
-    static final String MAPWIZE_API_KEY = "";
+    static final String MAPWIZE_API_KEY = "a0b142dea96e9b630855199c8c32c993";
     static final String MAPWIZE_VENUE_ID = "56c2ea3402275a0b00fb00ac";
-    static final String MAPWIZE_PLACELIST_ID = "5728a351a3a26c0b0027d5cf";
 
     private RecyclerView recyclerView;
     private FloorAdapter mAdapter;
@@ -79,14 +86,29 @@ public class FloorControllerActivity extends AppCompatActivity {
 
             map = mapwizeMap;
 
-            mapwizeMap.addOnFloorsChangeListener(floors -> mAdapter.setFloors(floors));
+             mapwizeMap.addOnFloorsChangeListener(floors -> {
+                 mAdapter.setFloors(floors);
+                 map.addOnFloorChangeListener(new MapwizeMap.OnFloorChangeListener() {
+                     @Override
+                     public void onFloorWillChange(@Nullable Floor floor) {
+                         Log.i("FloorControllerActivity", "Loading....");
+                     }
 
+                     @Override
+                     public void onFloorChange(@Nullable Floor floor) {
+                         runOnUiThread(() -> {
+                            mAdapter.setSelectedFloor(floor);
+                         });
+                     }
+                 });
+            });
         });
     }
 
     public static class FloorAdapter extends RecyclerView.Adapter<FloorAdapter.FloorViewHolder> {
         private List<Floor> floors = new ArrayList<>();
-        Context context;
+        private Floor selectedFloor;
+        private AdapterView.OnItemClickListener mlistener;
 
         // Provide a suitable constructor (depends on the kind of dataset)
         public FloorAdapter() {
@@ -97,12 +119,16 @@ public class FloorControllerActivity extends AppCompatActivity {
             notifyDataSetChanged();
         }
 
+        public void setSelectedFloor(Floor floor){
+            this.selectedFloor = floor;
+            notifyDataSetChanged();
+        }
 
         @NonNull
         @Override
         public FloorAdapter.FloorViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            this.context = parent.getContext();
-            View view = LayoutInflater.from(parent.getContext())
+            Context context = parent.getContext();
+            View view = LayoutInflater.from(context)
                     .inflate(R.layout.floor_button_view, parent, false);
             return new FloorViewHolder(view);
         }
@@ -111,6 +137,11 @@ public class FloorControllerActivity extends AppCompatActivity {
         public void onBindViewHolder(@NonNull FloorAdapter.FloorViewHolder holder, int position) {
             holder.setFloor(floors.get(position));
 
+            if(holder.floor.equals(selectedFloor)){
+                holder.floorButton.setBackgroundColor(Color.parseColor("#4B0082"));
+            }else {
+                holder.floorButton.setBackgroundColor(Color.parseColor("#9932CC"));
+            }
         }
 
         @Override
@@ -118,11 +149,14 @@ public class FloorControllerActivity extends AppCompatActivity {
             return this.floors.size();
         }
 
-        public static class FloorViewHolder extends RecyclerView.ViewHolder {
+
+
+        public class FloorViewHolder extends RecyclerView.ViewHolder {
             private Button floorButton;
             private Floor floor;
             public FloorViewHolder(View view) {
                 super(view);
+                view.getContext();
                 floorButton = view.findViewById(R.id.floorButton);
             }
 
@@ -130,7 +164,11 @@ public class FloorControllerActivity extends AppCompatActivity {
                 this.floor = floor;
                 floorButton.setText(floor.getName());
                 floorButton.setOnClickListener(v -> {
-                    // Faire quelque chose avec this.floor
+                    int adapterPostition = getAdapterPosition();
+                    if( mlistener != null && adapterPostition != RecyclerView.NO_POSITION){
+                        Floor nextFloor = floors.get(adapterPostition);
+
+                    }
                 });
             }
         }
