@@ -43,7 +43,7 @@ import io.mapwize.mapwizesdk.map.MapwizeView;
 public class FloorControllerActivity extends AppCompatActivity {
 
     static final String MAPBOX_API_KEY = "pk.mapwize";
-    static final String MAPWIZE_API_KEY = "a0b142dea96e9b630855199c8c32c993";
+    static final String MAPWIZE_API_KEY = "YOUR_MAPWIZE_API_KEY";
     static final String MAPWIZE_VENUE_ID = "56c2ea3402275a0b00fb00ac";
 
     private RecyclerView recyclerView;
@@ -105,10 +105,10 @@ public class FloorControllerActivity extends AppCompatActivity {
         });
     }
 
-    public static class FloorAdapter extends RecyclerView.Adapter<FloorAdapter.FloorViewHolder> {
+    public class FloorAdapter extends RecyclerView.Adapter<FloorAdapter.FloorViewHolder> {
         private List<Floor> floors = new ArrayList<>();
         private Floor selectedFloor;
-        private AdapterView.OnItemClickListener mlistener;
+        private OnItemClickListener mlistener;
 
         // Provide a suitable constructor (depends on the kind of dataset)
         public FloorAdapter() {
@@ -156,22 +156,26 @@ public class FloorControllerActivity extends AppCompatActivity {
             private Floor floor;
             public FloorViewHolder(View view) {
                 super(view);
-                view.getContext();
                 floorButton = view.findViewById(R.id.floorButton);
             }
 
             public void setFloor(Floor floor) {
                 this.floor = floor;
+
                 floorButton.setText(floor.getName());
                 floorButton.setOnClickListener(v -> {
                     int adapterPostition = getAdapterPosition();
                     if( mlistener != null && adapterPostition != RecyclerView.NO_POSITION){
                         Floor nextFloor = floors.get(adapterPostition);
-
+                        map.setFloor(nextFloor.getNumber());
                     }
                 });
             }
         }
+    }
+
+    public interface OnItemClickListener {
+        public void onButtonClick(View v, int position);
     }
 }
 
