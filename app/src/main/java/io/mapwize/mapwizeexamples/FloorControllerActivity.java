@@ -28,11 +28,11 @@ import io.mapwize.mapwizesdk.map.MapwizeMap;
 import io.mapwize.mapwizesdk.map.MapwizeView;
 
 /**
- * Like many other Activities we will use SimpleMapActivity as starting point for this Activity.
- * Fell free to check it if you need to understand the basics
- * The purpose of this next Activity is to demonstrate how to handle many floors in a Venue.
- * This demonstrate how to handle Mapwize Floors by clicking on the associated buttons.
- * To achieve this we will use a RecyclerView  with an Adapter Class.
+ * Like many other Activities we will use SimpleMapActivity as starting point for this Activity
+ * Feel free to check it if you need to understand the basics
+ * The purpose of this next Activity is to demonstrate how to handle many floors in a Venue
+ * This demonstrate how to handle Mapwize Floors by clicking on the associated buttons
+ * To achieve this we will use a RecyclerView  with an Adapter Class
  * For this demonstration we will create the Adapter Class in the same file, but you should create a new file for the Adapter Class
  */
 
@@ -104,6 +104,48 @@ public class FloorControllerActivity extends AppCompatActivity {
                  });
             });
         });
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        mapwizeView.onStart();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mapwizeView.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        mapwizeView.onPause();
+        super.onPause();
+    }
+
+    @Override
+    public void onStop() {
+        mapwizeView.onStop();
+        super.onStop();
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle saveInstanceState) {
+        super.onSaveInstanceState(saveInstanceState);
+        mapwizeView.onSaveInstanceState(saveInstanceState);
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        mapwizeView.onLowMemory();
+    }
+
+    @Override
+    public void onDestroy() {
+        mapwizeView.onDestroy();
+        super.onDestroy();
     }
 
     // You should create this Class in another file
