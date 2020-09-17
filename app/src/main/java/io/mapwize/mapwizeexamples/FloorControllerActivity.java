@@ -3,21 +3,16 @@ package io.mapwize.mapwizeexamples;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.annotation.SuppressLint;
-import android.app.Application;
 import android.content.Context;
-import android.graphics.BlendMode;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.FrameLayout;
 
@@ -36,8 +31,9 @@ import io.mapwize.mapwizesdk.map.MapwizeView;
  * Like many other Activities we will use SimpleMapActivity as starting point for this Activity.
  * Fell free to check it if you need to understand the basics
  * The purpose of this next Activity is to demonstrate how to handle many floors in a Venue.
- * To achieve this we will use Android RecyclerView Class in associatiation with our MapwizeApi (check the documentation for more details).
- * For this demonstration we will create an Adapter Class in the same file, but you should create a new file for the Adapter Class
+ * This demonstrate how to handle Mapwize Floors by clicking on the associated buttons.
+ * To achieve this we will use a RecyclerView  with an Adapter Class.
+ * For this demonstration we will create the Adapter Class in the same file, but you should create a new file for the Adapter Class
  */
 
 public class FloorControllerActivity extends AppCompatActivity {
@@ -96,21 +92,26 @@ public class FloorControllerActivity extends AppCompatActivity {
 
                      @Override
                      public void onFloorChange(@Nullable Floor floor) {
-                         runOnUiThread(() -> {
-                            mAdapter.setSelectedFloor(floor);
-                         });
+                         mAdapter.setSelectedFloor(floor);
+                     }
+                 });
+
+                 mAdapter.setOnFloorClickListener(new OnFloorClickListener() {
+                     @Override
+                     public void onFloorClick(Floor floor) {
+                         map.setFloor(floor.getNumber());
                      }
                  });
             });
         });
     }
 
+    // You should create this Class in another file
     public class FloorAdapter extends RecyclerView.Adapter<FloorAdapter.FloorViewHolder> {
         private List<Floor> floors = new ArrayList<>();
         private Floor selectedFloor;
-        private OnItemClickListener mlistener;
+        private OnFloorClickListener onFloorClickListener;
 
-        // Provide a suitable constructor (depends on the kind of dataset)
         public FloorAdapter() {
         }
 
@@ -124,11 +125,14 @@ public class FloorControllerActivity extends AppCompatActivity {
             notifyDataSetChanged();
         }
 
+        public void setOnFloorClickListener(OnFloorClickListener onFloorClickListener) {
+            this.onFloorClickListener = onFloorClickListener;
+        }
+
         @NonNull
         @Override
         public FloorAdapter.FloorViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            Context context = parent.getContext();
-            View view = LayoutInflater.from(context)
+            View view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.floor_button_view, parent, false);
             return new FloorViewHolder(view);
         }
@@ -149,11 +153,10 @@ public class FloorControllerActivity extends AppCompatActivity {
             return this.floors.size();
         }
 
-
-
         public class FloorViewHolder extends RecyclerView.ViewHolder {
             private Button floorButton;
             private Floor floor;
+
             public FloorViewHolder(View view) {
                 super(view);
                 floorButton = view.findViewById(R.id.floorButton);
@@ -164,18 +167,16 @@ public class FloorControllerActivity extends AppCompatActivity {
 
                 floorButton.setText(floor.getName());
                 floorButton.setOnClickListener(v -> {
-                    int adapterPostition = getAdapterPosition();
-                    if( mlistener != null && adapterPostition != RecyclerView.NO_POSITION){
-                        Floor nextFloor = floors.get(adapterPostition);
-                        map.setFloor(nextFloor.getNumber());
+                    if(onFloorClickListener != null && getAdapterPosition() != RecyclerView.NO_POSITION) {
+                        onFloorClickListener.onFloorClick(floor);
                     }
                 });
             }
         }
     }
 
-    public interface OnItemClickListener {
-        public void onButtonClick(View v, int position);
+    public interface OnFloorClickListener {
+        void onFloorClick(Floor floor);
     }
 }
 
