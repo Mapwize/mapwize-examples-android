@@ -14,7 +14,7 @@ import io.mapwize.mapwizesdk.map.MapwizeView;
 
 /**
  * This activity uses SimpleMapActivity as starting point.
- * The goal here is to demonstrate how to initialize to display only the chosen Venue
+ * The goal here is to demonstrate how to initialize a map and display only the chosen Venue
  */
 
 public class MapOptionRestrictToVenueActivity extends AppCompatActivity {
