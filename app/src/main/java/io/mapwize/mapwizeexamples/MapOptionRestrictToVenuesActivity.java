@@ -18,6 +18,11 @@ import io.mapwize.mapwizesdk.core.MapwizeConfiguration;
 import io.mapwize.mapwizesdk.map.MapOptions;
 import io.mapwize.mapwizesdk.map.MapwizeView;
 
+/**
+ * This activity uses SimpleMapActivity as starting point.
+ * The goal here is to demonstrate how to initialize a map and display only desired Venues from a list
+ */
+
 public class MapOptionRestrictToVenuesActivity extends AppCompatActivity {
 
     static final String MAPBOX_API_KEY = "pk.mapwize";
