@@ -43,4 +43,8 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, MapOptionRestrictToVenueActivity.class);
         startActivity(intent);
     }
+    public void loadMapCenteredOnPlace(View v) {
+        Intent intent = new Intent(this, MapOptionCenteredOnPlaceActivity.class);
+        startActivity(intent);
+    }
 }
