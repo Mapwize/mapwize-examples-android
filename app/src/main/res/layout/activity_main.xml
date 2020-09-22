@@ -47,6 +47,12 @@
                 android:onClick="showDirection"/>
 
             <Button
+                android:text="Restrict map content to desired venues"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="loadMapWithRestrictedVenues"/>
+          
+            <Button
                 android:text="Restrict content to your desired Venue"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
