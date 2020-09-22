@@ -38,4 +38,9 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, ShowDirectionActivity.class);
         startActivity(intent);
     }
+
+    public void setInitDefaultLanguage(View v) {
+        Intent intent = new Intent(this, MapOptionSetDefaultLanguageActivity.class);
+        startActivity(intent);
+    }
 }
