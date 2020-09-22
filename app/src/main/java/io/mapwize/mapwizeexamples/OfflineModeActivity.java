@@ -30,7 +30,7 @@ import io.mapwize.mapwizesdk.map.MapwizeView;
 public class OfflineModeActivity extends AppCompatActivity {
 
     static final String MAPBOX_API_KEY = "pk.mapwize";
-    static final String MAPWIZE_API_KEY = "";
+    static final String MAPWIZE_API_KEY = "a0b142dea96e9b630855199c8c32c993";
     static final String MAPWIZE_VENUE_ID = "56c2ea3402275a0b00fb00ac";
     static final String MAPWIZE_UNIVERSE_ID = "57ec94f8098881c02bdc5e9f";
 
@@ -65,54 +65,58 @@ public class OfflineModeActivity extends AppCompatActivity {
         // first you need to retrieve the correct Universe and Venue from Mapwize Api
         api = MapwizeApiFactory.getApi(conf);
         offlineManager = new OfflineManager(conf);
-
-
+        
             api.getVenue(MAPWIZE_VENUE_ID, new ApiCallback<Venue>() {
                 @Override
                 public void onSuccess(@NonNull Venue venue) {
                     api.getUniverse(MAPWIZE_UNIVERSE_ID, new ApiCallback<Universe>() {
                         @Override
                         public void onSuccess(@NonNull Universe universe) {
-                            offlineManager.downloadData(venue, universe, new OfflineManager.DownloadTaskListener() {
-                                @Override
-                                public void onSuccess(OfflineRegion offlineRegion) {
-                                    Log.i(TAG, "Data successfully retrieved");
+                            //remove all downloaded regions to be sure it works as intended
+                            if(offlineManager.getOfflineRegion(venue, universe) != null ) {
+                                offlineManager.removeData(offlineManager.getOfflineRegion(venue, universe), () -> Log.i(TAG, "onDataRemoved: removed..."));
+                            } else {
+                                offlineManager.downloadData(venue, universe, new OfflineManager.DownloadTaskListener() {
+                                    @Override
+                                    public void onSuccess(OfflineRegion offlineRegion) {
+                                        Log.i(TAG, "Data successfully retrieved");
 
-                                    mapwizeView.getMapAsync(mapwizeMap -> {
+                                        mapwizeView.getMapAsync(mapwizeMap -> {
 
-                                        mapwizeMap.setUniverse(offlineRegion.getUniverse());
-                                        mapwizeMap.centerOnVenue(offlineRegion.getVenue(), 1);
-                                    });
-                                }
-
-                                @Override
-                                public void onProgress(OfflineRegion offlineRegion, int i) {
-
-                                    Log.i(TAG, "onProgress: Loading.....");
-                                    while( i < 100) {
-
-                                        ProgressBar progressBar = (ProgressBar) findViewById(R.id.pBar);
-                                        progressBar.setVisibility(View.VISIBLE);
-                                        container.addView(progressBar);
-                                        TextView percentageView = findViewById(R.id.percentageView);
-
-                                        percentageView.setText("progression: "+ i + "%");
-                                        percentageView.setVisibility(View.VISIBLE);
-                                        container.addView(percentageView);
-
+                                            mapwizeMap.setUniverse(offlineRegion.getUniverse());
+                                            mapwizeMap.centerOnVenue(offlineRegion.getVenue(), 1);
+                                        });
                                     }
 
-                                    findViewById(R.id.pBar).setVisibility(View.GONE);
-                                    findViewById(R.id.percentageView).setVisibility(View.GONE);
-                                }
+                                    @Override
+                                    public void onProgress(OfflineRegion offlineRegion, int i) {
 
-                                @Override
-                                public void onFailure(OfflineRegion offlineRegion, OfflineException e) {
-                                    showError(
-                                            "Something went wrong, check your network status"
-                                    );
-                                }
-                            });
+                                        Log.i(TAG, "onProgress: Loading.....");
+                                        while( i < 100) {
+
+                                            ProgressBar progressBar = (ProgressBar) findViewById(R.id.pBar);
+                                            progressBar.setVisibility(View.VISIBLE);
+                                            //container.addView(progressBar);
+                                            TextView percentageView = findViewById(R.id.percentageView);
+
+                                            percentageView.setText("progression: "+ i + "%");
+                                            percentageView.setVisibility(View.VISIBLE);
+                                            //container.addView(percentageView);
+
+                                        }
+
+                                        findViewById(R.id.pBar).setVisibility(View.GONE);
+                                        findViewById(R.id.percentageView).setVisibility(View.GONE);
+                                    }
+
+                                    @Override
+                                    public void onFailure(OfflineRegion offlineRegion, OfflineException e) {
+                                        showError(
+                                                "Something went wrong, check your network status"
+                                        );
+                                    }
+                                });
+                            }
                         }
 
                         @Override
