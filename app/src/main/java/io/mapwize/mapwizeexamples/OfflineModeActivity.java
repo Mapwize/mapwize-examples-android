@@ -32,8 +32,6 @@ public class OfflineModeActivity extends AppCompatActivity {
     static final String MAPBOX_API_KEY = "pk.mapwize";
     static final String MAPWIZE_API_KEY = "a0b142dea96e9b630855199c8c32c993";
     static final String MAPWIZE_VENUE_ID = "56c2ea3402275a0b00fb00ac";
-    static final String MAPWIZE_UNIVERSE_ID = "57ec94f8098881c02bdc5e9f";
-
     static final String TAG = "OfflineModeActivity";
 
     MapwizeApi api;
@@ -65,81 +63,65 @@ public class OfflineModeActivity extends AppCompatActivity {
         // first you need to retrieve the correct Universe and Venue from Mapwize Api
         api = MapwizeApiFactory.getApi(conf);
         offlineManager = new OfflineManager(conf);
-        
-            api.getVenue(MAPWIZE_VENUE_ID, new ApiCallback<Venue>() {
-                @Override
-                public void onSuccess(@NonNull Venue venue) {
-                    api.getUniverse(MAPWIZE_UNIVERSE_ID, new ApiCallback<Universe>() {
-                        @Override
-                        public void onSuccess(@NonNull Universe universe) {
-                            //remove all downloaded regions to be sure it works as intended
-                            if(offlineManager.getOfflineRegion(venue, universe) != null ) {
-                                offlineManager.removeData(offlineManager.getOfflineRegion(venue, universe), () -> Log.i(TAG, "onDataRemoved: removed..."));
-                            } else {
-                                offlineManager.downloadData(venue, universe, new OfflineManager.DownloadTaskListener() {
-                                    @Override
-                                    public void onSuccess(OfflineRegion offlineRegion) {
-                                        Log.i(TAG, "Data successfully retrieved");
 
-                                        mapwizeView.getMapAsync(mapwizeMap -> {
 
-                                            mapwizeMap.setUniverse(offlineRegion.getUniverse());
-                                            mapwizeMap.centerOnVenue(offlineRegion.getVenue(), 1);
-                                        });
-                                    }
+        api.getVenue(MAPWIZE_VENUE_ID, new ApiCallback<Venue>() {
+            @Override
+            public void onSuccess(@NonNull Venue venue) {
+                runOnUiThread(() -> {
+                    showLoading();
+                });
 
-                                    @Override
-                                    public void onProgress(OfflineRegion offlineRegion, int i) {
+                // delete the stored OfflineRegion to be sure everything works fine
+                if (offlineManager.getOfflineRegion( venue, venue.getDefaultUniverse()) != null ) {
+                    offlineManager.removeData( offlineManager.getOfflineRegion( venue, venue.getDefaultUniverse() ), () -> Log.i(TAG, "onDataRemoved: removed..."));
+                }
+                offlineManager.downloadData(venue, venue.getDefaultUniverse(), new OfflineManager.DownloadTaskListener() {
+                    @Override
+                    public void onSuccess(OfflineRegion offlineRegion) {
+                        runOnUiThread(() -> {
+                            showMap();
+                        });
+                        Log.i(TAG, "Data successfully retrieved");
+                        mapwizeView.getMapAsync(mapwizeMap -> {
+                            mapwizeMap.setUniverseForVenue(offlineRegion.getUniverse(),offlineRegion.getVenue());
+                            mapwizeMap.centerOnVenue(offlineRegion.getVenue(), 1);
+                        });
+                    }
 
-                                        Log.i(TAG, "onProgress: Loading.....");
-                                        while( i < 100) {
+                    @Override
+                    public void onProgress(OfflineRegion offlineRegion, int i) {
 
-                                            ProgressBar progressBar = (ProgressBar) findViewById(R.id.pBar);
-                                            progressBar.setVisibility(View.VISIBLE);
-                                            //container.addView(progressBar);
-                                            TextView percentageView = findViewById(R.id.percentageView);
+                        Log.i(TAG, "onProgress: Loading.....");
+                        showProgress(i);
+                    }
 
-                                            percentageView.setText("progression: "+ i + "%");
-                                            percentageView.setVisibility(View.VISIBLE);
-                                            //container.addView(percentageView);
-
-                                        }
-
-                                        findViewById(R.id.pBar).setVisibility(View.GONE);
-                                        findViewById(R.id.percentageView).setVisibility(View.GONE);
-                                    }
-
-                                    @Override
-                                    public void onFailure(OfflineRegion offlineRegion, OfflineException e) {
-                                        showError(
-                                                "Something went wrong, check your network status"
-                                        );
-                                    }
-                                });
+                    @Override
+                    public void onFailure(OfflineRegion offlineRegion, OfflineException e) {
+                        runOnUiThread(() -> {
+                            showError(
+                                    "Something went wrong"
+                            );
+                        });
+                        offlineManager.removeData(offlineRegion, new OfflineManager.RemoveDataCallback() {
+                            @Override
+                            public void onDataRemoved() {
+                                Log.i(TAG, "onDataRemoved: data removed ...");
                             }
-                        }
+                        });
+                    }
+                });
+            }
 
-                        @Override
-                        public void onFailure(@NonNull Throwable throwable) {
-                            runOnUiThread(() -> {
-                                showError(
-                                        "Wrong Universe"
-                                );
-                            });
-                        }
-                    });
-                }
-
-                @Override
-                public void onFailure(@NonNull Throwable throwable) {
-                    runOnUiThread(() -> {
-                        showError(
-                                "Wrong Venue Id"
-                        );
-                    });
-                }
-            });
-
+            @Override
+            public void onFailure(@NonNull Throwable throwable) {
+                runOnUiThread(() -> {
+                    showError(
+                            "Wrong Venue Id"
+                    );
+                });
+            }
+        });
     }
 
     private void showError(String message) {
@@ -148,5 +130,21 @@ public class OfflineModeActivity extends AppCompatActivity {
                 message,
                 Toast.LENGTH_LONG)
                 .show();
+    }
+
+    private void showMap() {
+        findViewById(R.id.container).setVisibility(View.VISIBLE);
+        findViewById(R.id.spinnerBar).setVisibility(View.GONE);
+        findViewById(R.id.percentageView).setVisibility(View.GONE);
+    }
+
+    private void showProgress(int progress) {
+        ((TextView)findViewById(R.id.percentageView)).setText("Dowloaded: "+ progress + "%");
+    }
+
+    private void showLoading() {
+        findViewById(R.id.container).setVisibility(View.GONE);
+        findViewById(R.id.spinnerBar).setVisibility(View.VISIBLE);
+        findViewById(R.id.percentageView).setVisibility(View.VISIBLE);
     }
 }
