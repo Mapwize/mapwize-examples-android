@@ -46,6 +46,12 @@
                 android:layout_height="wrap_content"
                 android:onClick="showDirection"/>
 
+            <Button
+                android:text="Load map centered on venue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="loadMapCenteredOnVenue"/>
+
         </LinearLayout>
 
     </ScrollView>

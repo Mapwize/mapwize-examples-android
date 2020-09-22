@@ -1,35 +1,34 @@
 package io.mapwize.mapwizeexamples;
 
-import android.os.Bundle;
-
-import com.mapbox.mapboxsdk.Mapbox;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.os.Bundle;
 import android.widget.FrameLayout;
+
+import com.mapbox.mapboxsdk.Mapbox;
 
 import io.mapwize.mapwizesdk.core.MapwizeConfiguration;
 import io.mapwize.mapwizesdk.map.MapOptions;
 import io.mapwize.mapwizesdk.map.MapwizeView;
 
 /**
- * This SimpleMapActivity will used for almost every demo in this app
- * You can use it as starting point and add some configuration or methods provided by our SDK
+ * This Activity uses the SimpleMapActivity as starting point but we will show you how to use MapOptions to initialize your map with different properties
+ * In this Activity we will use CenterOnVenue option to load your map center on the venue of your choice
  */
 
-public class SimpleMapActivity extends AppCompatActivity {
+public class MapOptionCenteredOnVenueActivity extends AppCompatActivity {
 
     static final String MAPBOX_API_KEY = "pk.mapwize";
     static final String MAPWIZE_API_KEY = "YOUR_MAPWIZE_API_KEY";
-    static final String MAPWIZE_VENUE_ID = "YOU_VENUE_ID";
+    static final String MAPWIZE_VENUE_ID = "56c2ea3402275a0b00fb00ac";
 
     MapwizeView mapwizeView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_simple_map);
+        setContentView(R.layout.activity_map_option_centered_on_venue);
         Mapbox.getInstance(this, MAPBOX_API_KEY);
         FrameLayout container = findViewById(R.id.container);
         MapwizeConfiguration conf = new MapwizeConfiguration.Builder(this,
@@ -37,6 +36,7 @@ public class SimpleMapActivity extends AppCompatActivity {
                 .build();
 
         MapOptions options = new MapOptions.Builder()
+                .centerOnVenue(MAPWIZE_VENUE_ID)
                 .build();
 
         mapwizeView = new MapwizeView(getApplicationContext(), conf, options);
